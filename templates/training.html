@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email preview</title>
+</head>
+
+<body style="font-family: Arial, sans-serif; background: #eef2f6; padding: 24px;">
+    <main style="max-width: 650px; margin: auto;">
+        <p>
+            <a href="{{ url_for('home') }}">← Back to dashboard</a>
+        </p>
+
+        <p>
+            <strong>Local simulation preview.</strong>
+            No email has been sent. Clicking the button records a test visit.
+        </p>
+
+        <article style="background: white; padding: 32px; border-radius: 10px;">
+            <p>To: {{ simulation["email"] }}</p>
+
+            <h1 style="font-size: 24px;">
+                {{ simulation["subject"] }}
+            </h1>
+
+            <p>Hello {{ simulation["name"] }},</p>
+
+            <p style="white-space: pre-wrap; line-height: 1.6;">{{ simulation["message"] }}</p>
+
+            <p style="margin: 30px 0;">
+                <a
+                    href="{{ tracking_link }}"
+                    style="background: #16645b; color: white; padding: 14px 24px; text-decoration: none; border-radius: 6px; display: inline-block;"
+                >
+                    Review details
+                </a>
+            </p>
+
+            <p>Thank you,<br>Workplace Operations</p>
+        </article>
+
+        <h2>Personalised training link</h2>
+        <p style="overflow-wrap: anywhere;">{{ tracking_link }}</p>
+    </main>
+</body>
+</html>

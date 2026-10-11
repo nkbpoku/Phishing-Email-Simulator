@@ -1,0 +1,16 @@
+# Local Python environment
+.venv/
+
+# Python-generated files
+__pycache__/
+*.pyc
+
+# Private settings
+.env
+
+# Local database files
+*.db
+*.sqlite3
+
+# macOS-generated files
+.DS_Store

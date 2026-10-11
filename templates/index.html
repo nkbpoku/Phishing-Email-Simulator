@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Email Simulator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f6;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin: 16px 0 6px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font: inherit;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #16645b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        a {
+            color: #16645b;
+        }
+
+        .error {
+            color: #b91c1c;
+        }
+    </style>
+</head>
+
+<body>
+<main>
+    <h1>Phishing Email Simulator</h1>
+    <p>A local security awareness training project.</p>
+
+    <section class="card">
+        <h2>Results overview</h2>
+        <p>
+            <strong>{{ simulations | length }}</strong> simulations
+            &nbsp;·&nbsp;
+            <strong>{{ visited }}</strong> with recorded link visits
+        </p>
+        <p>
+            A visit may come from a person or an automated scanner.
+            It does not prove who clicked.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>Create a simulated email</h2>
+
+        {% if error %}
+            <p class="error" role="alert">{{ error }}</p>
+        {% endif %}
+
+        <form method="post">
+            <label for="name">Participant name</label>
+            <input
+                id="name"
+                name="name"
+                maxlength="100"
+                placeholder="Alex Example"
+                required
+            >
+
+            <label for="email">Participant email</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                maxlength="254"
+                placeholder="alex@example.com"
+                required
+            >
+
+            <label for="subject">Email subject</label>
+            <input
+                id="subject"
+                name="subject"
+                maxlength="200"
+                placeholder="Action requested: review the updated workplace policy"
+                required
+            >
+
+            <label for="message">Email message</label>
+            <textarea
+                id="message"
+                name="message"
+                rows="6"
+                maxlength="5000"
+                placeholder="Please review the updated workplace policy before Friday."
+                required
+            ></textarea>
+
+            <p>
+                Use demo participants or participants approved for
+                your awareness exercise.
+            </p>
+
+            <button type="submit">Create and preview</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Simulation results</h2>
+        <p>Refresh this page after testing a link.</p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Visits</th>
+                        <th>First visit (UTC)</th>
+                        <th>Preview</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for simulation in simulations %}
+                    <tr>
+                        <td>{{ simulation["name"] }}</td>
+                        <td>{{ simulation["email"] }}</td>
+                        <td>{{ simulation["visits"] }}</td>
+                        <td>
+                            {{ simulation["first_visit"] or "No visits" }}
+                        </td>
+                        <td>
+                            <a href="{{ url_for(
+                                'preview',
+                                simulation_id=simulation['id']
+                            ) }}">View email</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">No simulations created yet.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>
