@@ -10,6 +10,9 @@ from flask import (
     request,
     url_for,
 )
+from flask_login import login_required
+
+from auth import initialise_auth
 
 app = Flask(__name__)
 
@@ -39,6 +42,7 @@ def initialise_database():
 
 
 @app.route("/", methods=["GET", "POST"])
+@login_required
 def home():
     error = None
 
@@ -90,6 +94,7 @@ def home():
 
 
 @app.route("/preview/<int:simulation_id>")
+@login_required
 def preview(simulation_id):
     with connect_db() as connection:
         simulation = connection.execute("""
@@ -140,6 +145,7 @@ def protect_response(response):
 
 
 initialise_database()
+initialise_auth(app, connect_db)
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5001)
