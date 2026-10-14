@@ -38,3 +38,40 @@ from version control.
 - Automated tests.
 
 Use demo participants or participants approved for a security awareness exercise.
+
+
+## Configure administrator access
+
+Create a `.env` file in the project folder and add:
+
+```dotenv
+SECRET_KEY=replace_with_a_random_secret_key
+```
+
+Generate your own key locally:
+
+```bash
+python -c "import secrets; print(secrets.token_hex(32))"
+```
+
+Copy the generated value after `SECRET_KEY=`. Keep `.env` private
+and excluded from Git.
+
+Create an administrator account:
+
+```bash
+python -m flask --app app create-admin
+```
+
+Follow the prompts. Choose a unique password of at least 12 characters.
+
+Start the application:
+
+```bash
+python app.py
+```
+
+Open http://127.0.0.1:5001 and sign in.
+
+Administrator login is required for the dashboard and email previews.
+Participant training links remain accessible without admin login.
